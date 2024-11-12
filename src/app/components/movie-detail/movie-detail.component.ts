@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { MovieDetails, MovieService } from '../../services/movie.service';
+import { MovieService } from '../../services/movie.service';
 import { ActivatedRoute } from '@angular/router';
-
+import { MovieDetails } from '../../interfaces';
 @Component({
   selector: 'app-movie-detail',
   template: `

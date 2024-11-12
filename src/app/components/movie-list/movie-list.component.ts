@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed, effect, OnInit, signal } from '@angular/core';
 import { MovieService } from '../../services/movie.service';
 import { Router } from '@angular/router';
 
@@ -8,7 +8,8 @@ import { Router } from '@angular/router';
     <div class="container mx-auto p-6 space-y-6">
     <div class="flex items-center space-x-4">
       <input
-        [(ngModel)]="searchQuery"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
         (input)="onSearch()"
         placeholder="Search movies"
         class="w-full px-4 py-2 rounded-lg shadow-sm text-gray-700 bg-white focus:ring focus:ring-indigo-300 border border-gray-300"
@@ -20,7 +21,7 @@ import { Router } from '@angular/router';
 
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <div
-          *ngFor="let movie of movieService.popularMovies()"
+          *ngFor="let movie of displayedMovies()"
           (click)="selectMovie(movie.id)"
           class="cursor-pointer transition-transform transform hover:scale-105"
         >
@@ -31,16 +32,22 @@ import { Router } from '@angular/router';
   `,
   styles: [],
 })
-export class MovieListComponent {
-  searchQuery: string = '';
+export class MovieListComponent implements OnInit {
+  searchQuery = signal<string>('');
+  displayedMovies = computed(() => this.searchQuery().trim() 
+    ? this.movieService.searchResults()
+    : this.movieService.popularMovies()
+  );
 
-  constructor(public movieService: MovieService, private router: Router) {
+  constructor(public movieService: MovieService, private router: Router) {}
+
+  ngOnInit() {
     this.movieService.fetchPopularMovies();
   }
 
   onSearch() {
-    if (this.searchQuery.trim()) {
-      this.movieService.searchMovies(this.searchQuery);
+    if (this.searchQuery().trim()) {
+      this.movieService.searchMovies(this.searchQuery());
     } else {
       this.movieService.fetchPopularMovies();
     }
