@@ -7,7 +7,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { MovieDetailComponent } from './components/movie-detail/movie-detail.component';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { apiKeyInterceptor } from './interceptors/api-key.interceptor';
 
 const routes: Routes = [
   { path: '', component: MovieListComponent },
@@ -27,7 +28,9 @@ const routes: Routes = [
     FormsModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [provideHttpClient()],
+  providers: [
+    provideHttpClient(withInterceptors([apiKeyInterceptor])),
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

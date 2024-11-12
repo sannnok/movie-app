@@ -50,7 +50,6 @@ export interface MovieDetails extends Movie {
 })
 export class MovieService {
   private baseUrl = 'https://api.themoviedb.org/3';
-  private apiKey = environment.tmdbApiKey;
 
   popularMovies = signal<Movie[]>([]);
   searchResults = signal<Movie[]>([]);
@@ -59,17 +58,18 @@ export class MovieService {
   constructor(private http: HttpClient) {}
 
   fetchPopularMovies() {
-    this.http.get<{ results: Movie[] }>(`${this.baseUrl}/movie/popular?api_key=${this.apiKey}`)
+    this.http.get<{ results: Movie[] }>(`${this.baseUrl}/movie/popular`)
       .subscribe(response => this.popularMovies.set(response.results));
   }
 
   searchMovies(query: string) {
-    this.http.get<{ results: Movie[] }>(`${this.baseUrl}/search/movie?api_key=${this.apiKey}&query=${query}`)
-      .subscribe(response => this.searchResults.set(response.results));
+    this.http.get<{ results: Movie[] }>(`${this.baseUrl}/search/movie`, {
+      params: { query }
+    }).subscribe(response => this.searchResults.set(response.results));
   }
 
   fetchMovieDetail(id: number) {
-    this.http.get<MovieDetails>(`${this.baseUrl}/movie/${id}?api_key=${this.apiKey}`)
+    this.http.get<MovieDetails>(`${this.baseUrl}/movie/${id}`)
       .subscribe(response => this.movieDetail.set(response));
   }
 }
