@@ -1,0 +1,5 @@
+export const environment = {
+  production: false,
+  tmdbApiKey: 'cf7781e2104180e402eb4a7073ca5382',
+	tmdbReadAccessToken: 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjZjc3ODFlMjEwNDE4MGU0MDJlYjRhNzA3M2NhNTM4MiIsIm5iZiI6MTczMTA4MzU5MC41ODg3NjUsInN1YiI6IjY3MmUzY2I1ZjcwMmQ0M2VlYTg1MmI1OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.wTcpFWHxqzrqXuG4a_7uZKDhnQXY4_QvmNGaKP6Q0K8',
+};
