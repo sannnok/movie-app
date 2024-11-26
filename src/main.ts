@@ -1,5 +1,16 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { AppModule } from './app/app.module';
+import { provideRouter } from '@angular/router';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { AppComponent } from './app/app.component';
+import { apiKeyInterceptor } from './app/interceptors/api-key.interceptor';
+import { errorInterceptor } from './app/interceptors/global-error.interceptor';
+import { loaderInterceptor } from './app/interceptors/loader.interceptor';
+import { routes } from './app/app.routes';
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(withInterceptors([apiKeyInterceptor, errorInterceptor, loaderInterceptor])),
+  ]
+})
+  .catch(err => console.error('Application failed to bootstrap:', err));
